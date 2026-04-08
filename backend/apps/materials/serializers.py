@@ -55,7 +55,7 @@ class ResearchProjectSerializer(BaseMaterialSerializer):
         model = ResearchProject
         fields = BaseMaterialSerializer.Meta.fields + [
             'project_name', 'level', 'start_date', 'end_date', 'funds',
-            'number', 'personnel', 'remark'
+            'number', 'host', 'participants', 'supervisor', 'contact_phone', 'remark'
         ]
 
 
@@ -97,7 +97,8 @@ class TechnologyCompetitionSerializer(BaseMaterialSerializer):
         model = TechnologyCompetition
         fields = BaseMaterialSerializer.Meta.fields + [
             'competition', 'is_whitelist', 'title', 'level', 'award_date',
-            'grade', 'organization', 'group', 'author', 'supervisor', 'remark'
+            'grade', 'organization', 'group', 'leader', 'members', 'supervisor', 
+            'certificate_number', 'contact_phone', 'remark'
         ]
 
 
@@ -107,7 +108,7 @@ class SocialPracticeSerializer(BaseMaterialSerializer):
     class Meta(BaseMaterialSerializer.Meta):
         model = SocialPractice
         fields = BaseMaterialSerializer.Meta.fields + [
-            'title', 'level', 'date', 'author', 'remark'
+            'title', 'level', 'date', 'host', 'participants', 'content', 'contact_phone', 'remark'
         ]
 
 
@@ -117,7 +118,7 @@ class SocialServiceSerializer(BaseMaterialSerializer):
     class Meta(BaseMaterialSerializer.Meta):
         model = SocialService
         fields = BaseMaterialSerializer.Meta.fields + [
-            'title', 'level', 'date', 'author', 'remark'
+            'title', 'level', 'date', 'author', 'content', 'contact_phone', 'remark'
         ]
 
 
@@ -127,6 +128,6 @@ class OtherPracticeSerializer(BaseMaterialSerializer):
     class Meta(BaseMaterialSerializer.Meta):
         model = OtherPractice
         fields = BaseMaterialSerializer.Meta.fields + [
-            'title', 'level', 'date', 'organization', 'author', 'remark'
+            'title', 'level', 'date', 'organization', 'author', 'content', 'contact_phone', 'remark'
         ]
 

@@ -30,7 +30,19 @@
         </el-form-item>
         
         <el-form-item label="项目级别">
-          <el-input v-model="form.level" placeholder="请输入项目级别" />
+          <el-select
+            v-model="form.level"
+            placeholder="请选择或输入项目级别"
+            filterable
+            allow-create
+            default-first-option
+            style="width: 100%"
+          >
+            <el-option label="国家级" value="national" />
+            <el-option label="省级" value="provincial" />
+            <el-option label="校级" value="school" />
+            <el-option label="院级" value="college" />
+          </el-select>
         </el-form-item>
         
         <el-form-item label="立项时间">
@@ -67,13 +79,30 @@
           <el-input v-model="form.number" placeholder="请输入项目编号" />
         </el-form-item>
         
-        <el-form-item label="主持人、参与人员及顺序">
+        <el-form-item label="主持人（姓名+学号）">
           <el-input
-            v-model="form.personnel"
+            v-model="form.host"
             type="textarea"
             :rows="3"
-            placeholder="请输入主持人、参与人员及顺序"
+            placeholder="请输入主持人姓名和学号，格式：姓名-学号"
           />
+        </el-form-item>
+        
+        <el-form-item label="参与人（姓名+学号）">
+          <el-input
+            v-model="form.participants"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入参与人姓名和学号，格式：姓名-学号"
+          />
+        </el-form-item>
+        
+        <el-form-item label="指导教师">
+          <el-input v-model="form.supervisor" placeholder="请输入指导教师" />
+        </el-form-item>
+        
+        <el-form-item label="负责人联系电话">
+          <el-input v-model="form.contact_phone" placeholder="请输入负责人联系电话" />
         </el-form-item>
         
         <el-form-item label="证明材料" prop="files">
@@ -148,7 +177,10 @@ const form = reactive({
   end_date: '',
   funds: null,
   number: '',
-  personnel: '',
+  host: '',
+  participants: '',
+  supervisor: '',
+  contact_phone: '',
   remark: ''
 })
 
@@ -282,7 +314,10 @@ onMounted(async () => {
           end_date: data.end_date || '',
           funds: data.funds || null,
           number: data.number || '',
-          personnel: data.personnel || '',
+          host: data.host || '',
+          participants: data.participants || '',
+          supervisor: data.supervisor || '',
+          contact_phone: data.contact_phone || '',
           remark: data.remark || ''
         })
       }

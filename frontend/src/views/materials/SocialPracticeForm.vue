@@ -30,7 +30,19 @@
         </el-form-item>
         
         <el-form-item label="级别">
-          <el-input v-model="form.level" placeholder="请输入级别" />
+          <el-select
+            v-model="form.level"
+            placeholder="请选择或输入级别"
+            filterable
+            allow-create
+            default-first-option
+            style="width: 100%"
+          >
+            <el-option label="国家级" value="national" />
+            <el-option label="省级" value="provincial" />
+            <el-option label="校级" value="school" />
+            <el-option label="院级" value="college" />
+          </el-select>
         </el-form-item>
         
         <el-form-item label="时间">
@@ -43,13 +55,35 @@
           />
         </el-form-item>
         
-        <el-form-item label="主持人、参与者、顺序">
+        <el-form-item label="主持人（姓名+学号）">
           <el-input
-            v-model="form.author"
+            v-model="form.host"
+            type="textarea"
+            :rows="2"
+            placeholder="请输入主持人姓名和学号，格式：姓名-学号"
+          />
+        </el-form-item>
+        
+        <el-form-item label="参与人（姓名+学号）">
+          <el-input
+            v-model="form.participants"
             type="textarea"
             :rows="3"
-            placeholder="请输入主持人、参与者、顺序"
+            placeholder="请输入参与人姓名和学号，格式：姓名-学号"
           />
+        </el-form-item>
+        
+        <el-form-item label="具体内容">
+          <el-input
+            v-model="form.content"
+            type="textarea"
+            :rows="4"
+            placeholder="请输入具体内容"
+          />
+        </el-form-item>
+        
+        <el-form-item label="负责人联系电话">
+          <el-input v-model="form.contact_phone" placeholder="请输入负责人联系电话" />
         </el-form-item>
         
         <el-form-item label="证明材料" prop="files">
@@ -121,7 +155,10 @@ const form = reactive({
   title: '',
   level: '',
   date: '',
-  author: '',
+  host: '',
+  participants: '',
+  content: '',
+  contact_phone: '',
   remark: ''
 })
 
@@ -234,7 +271,10 @@ onMounted(async () => {
           title: data.title || '',
           level: data.level || '',
           date: data.date || '',
-          author: data.author || '',
+          host: data.host || '',
+          participants: data.participants || '',
+          content: data.content || '',
+          contact_phone: data.contact_phone || '',
           remark: data.remark || ''
         })
       }

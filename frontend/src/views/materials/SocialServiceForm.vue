@@ -30,7 +30,19 @@
         </el-form-item>
         
         <el-form-item label="级别">
-          <el-input v-model="form.level" placeholder="请输入级别" />
+          <el-select
+            v-model="form.level"
+            placeholder="请选择或输入级别"
+            filterable
+            allow-create
+            default-first-option
+            style="width: 100%"
+          >
+            <el-option label="国家级" value="national" />
+            <el-option label="省级" value="provincial" />
+            <el-option label="校级" value="school" />
+            <el-option label="院级" value="college" />
+          </el-select>
         </el-form-item>
         
         <el-form-item label="时间">
@@ -50,6 +62,19 @@
             :rows="3"
             placeholder="请输入作者及顺序"
           />
+        </el-form-item>
+        
+        <el-form-item label="具体内容">
+          <el-input
+            v-model="form.content"
+            type="textarea"
+            :rows="4"
+            placeholder="请输入具体内容"
+          />
+        </el-form-item>
+        
+        <el-form-item label="负责人联系电话">
+          <el-input v-model="form.contact_phone" placeholder="请输入负责人联系电话" />
         </el-form-item>
         
         <el-form-item label="证明材料" prop="files">
@@ -122,6 +147,8 @@ const form = reactive({
   level: '',
   date: '',
   author: '',
+  content: '',
+  contact_phone: '',
   remark: ''
 })
 
@@ -235,6 +262,8 @@ onMounted(async () => {
           level: data.level || '',
           date: data.date || '',
           author: data.author || '',
+          content: data.content || '',
+          contact_phone: data.contact_phone || '',
           remark: data.remark || ''
         })
       }

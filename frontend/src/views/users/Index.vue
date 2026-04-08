@@ -453,7 +453,7 @@ onMounted(() => {
 
 <style scoped>
 .users-page {
-  padding: 20px;
+  padding: 0px;
 }
 
 .card-header {

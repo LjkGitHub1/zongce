@@ -277,7 +277,7 @@ onMounted(() => {
 
 <style scoped>
 .permission-page {
-  padding: 20px;
+  padding: 0px;
 }
 
 .card-header {

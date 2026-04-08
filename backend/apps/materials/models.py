@@ -31,13 +31,23 @@ class BaseMaterial(models.Model):
 
 class ResearchProject(BaseMaterial):
     """课题项目"""
+    LEVEL_CHOICES = [
+        ('national', '国家级'),
+        ('provincial', '省级'),
+        ('school', '校级'),
+        ('college', '院级'),
+    ]
+    
     project_name = models.CharField(max_length=200, verbose_name='项目名称')
-    level = models.CharField(max_length=50, blank=True, null=True, verbose_name='项目级别')
+    level = models.CharField(max_length=50, choices=LEVEL_CHOICES, blank=True, null=True, verbose_name='项目级别')
     start_date = models.DateField(blank=True, null=True, verbose_name='立项时间')
     end_date = models.DateField(blank=True, null=True, verbose_name='结题时间')
     funds = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='项目经费（万元）')
     number = models.CharField(max_length=100, blank=True, null=True, verbose_name='项目编号')
-    personnel = models.TextField(blank=True, null=True, verbose_name='主持人、参与人员及顺序')
+    host = models.TextField(blank=True, null=True, verbose_name='主持人（姓名+学号）')
+    participants = models.TextField(blank=True, null=True, verbose_name='参与人（姓名+学号）')
+    supervisor = models.CharField(max_length=100, blank=True, null=True, verbose_name='指导教师')
+    contact_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='负责人联系电话')
     remark = models.TextField(blank=True, null=True, verbose_name='备注')
     
     class Meta:
@@ -107,6 +117,13 @@ class TechnologyCompetition(BaseMaterial):
         ('college', '院级'),
     ]
     
+    GRADE_CHOICES = [
+        ('first', '一等奖'),
+        ('second', '二等奖'),
+        ('third', '三等奖'),
+        ('excellent', '优秀奖'),
+    ]
+    
     competition = models.CharField(max_length=200, verbose_name='赛事名称')
     is_whitelist = models.BooleanField(blank=True, null=True, verbose_name='是否为白名单赛事')
     title = models.CharField(max_length=200, blank=True, null=True, verbose_name='作品名称')
@@ -115,8 +132,11 @@ class TechnologyCompetition(BaseMaterial):
     grade = models.CharField(max_length=50, blank=True, null=True, verbose_name='获奖等级')
     organization = models.CharField(max_length=200, blank=True, null=True, verbose_name='组织单位名称')
     group = models.CharField(max_length=20, blank=True, null=True, verbose_name='团体/个人')
-    author = models.TextField(blank=True, null=True, verbose_name='负责人/参与者及顺序')
+    leader = models.TextField(blank=True, null=True, verbose_name='负责人（姓名+学号）')
+    members = models.TextField(blank=True, null=True, verbose_name='队员（姓名+学号）')
     supervisor = models.CharField(max_length=100, blank=True, null=True, verbose_name='指导老师')
+    certificate_number = models.CharField(max_length=100, blank=True, null=True, verbose_name='奖状编号')
+    contact_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='负责人联系电话')
     remark = models.TextField(blank=True, null=True, verbose_name='备注')
     
     class Meta:
@@ -128,10 +148,20 @@ class TechnologyCompetition(BaseMaterial):
 
 class SocialPractice(BaseMaterial):
     """社会实践调研"""
+    LEVEL_CHOICES = [
+        ('national', '国家级'),
+        ('provincial', '省级'),
+        ('school', '校级'),
+        ('college', '院级'),
+    ]
+    
     title = models.CharField(max_length=200, verbose_name='名称')
-    level = models.CharField(max_length=50, blank=True, null=True, verbose_name='级别')
+    level = models.CharField(max_length=50, choices=LEVEL_CHOICES, blank=True, null=True, verbose_name='级别')
     date = models.DateField(blank=True, null=True, verbose_name='时间')
-    author = models.TextField(blank=True, null=True, verbose_name='主持人、参与者、顺序')
+    host = models.TextField(blank=True, null=True, verbose_name='主持人（姓名+学号）')
+    participants = models.TextField(blank=True, null=True, verbose_name='参与人（姓名+学号）')
+    content = models.TextField(blank=True, null=True, verbose_name='具体内容')
+    contact_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='负责人联系电话')
     remark = models.TextField(blank=True, null=True, verbose_name='备注')
     
     class Meta:
@@ -143,10 +173,19 @@ class SocialPractice(BaseMaterial):
 
 class SocialService(BaseMaterial):
     """服务社会"""
+    LEVEL_CHOICES = [
+        ('national', '国家级'),
+        ('provincial', '省级'),
+        ('school', '校级'),
+        ('college', '院级'),
+    ]
+    
     title = models.CharField(max_length=200, verbose_name='名称')
-    level = models.CharField(max_length=50, blank=True, null=True, verbose_name='级别')
+    level = models.CharField(max_length=50, choices=LEVEL_CHOICES, blank=True, null=True, verbose_name='级别')
     date = models.DateField(blank=True, null=True, verbose_name='时间')
     author = models.TextField(blank=True, null=True, verbose_name='作者及顺序')
+    content = models.TextField(blank=True, null=True, verbose_name='具体内容')
+    contact_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='负责人联系电话')
     remark = models.TextField(blank=True, null=True, verbose_name='备注')
     
     class Meta:
@@ -158,11 +197,20 @@ class SocialService(BaseMaterial):
 
 class OtherPractice(BaseMaterial):
     """其他实践活动"""
+    LEVEL_CHOICES = [
+        ('national', '国家级'),
+        ('provincial', '省级'),
+        ('school', '校级'),
+        ('college', '院级'),
+    ]
+    
     title = models.CharField(max_length=200, verbose_name='名称')
-    level = models.CharField(max_length=50, blank=True, null=True, verbose_name='级别')
+    level = models.CharField(max_length=50, choices=LEVEL_CHOICES, blank=True, null=True, verbose_name='级别')
     date = models.DateField(blank=True, null=True, verbose_name='时间')
     organization = models.CharField(max_length=200, blank=True, null=True, verbose_name='提供证明单位')
     author = models.TextField(blank=True, null=True, verbose_name='参与人')
+    content = models.TextField(blank=True, null=True, verbose_name='具体内容')
+    contact_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='负责人联系电话')
     remark = models.TextField(blank=True, null=True, verbose_name='备注')
     
     class Meta:

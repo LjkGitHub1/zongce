@@ -37,23 +37,7 @@
     
     <el-row :gutter="15" style="margin-top: 15px">
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-        <el-card>
-          <template #header>
-            <span>材料类型分布</span>
-          </template>
-          <div class="type-stats">
-            <div v-for="(value, key) in filteredTypeStats" :key="key" class="type-item">
-              <span class="type-name">{{ getTypeName(key) }}</span>
-              <span class="type-value">{{ value }}</span>
-            </div>
-            <div v-if="Object.keys(filteredTypeStats).length === 0" class="empty-tip">
-              暂无数据
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-        <el-card>
+        <el-card class="quick-actions-card">
           <template #header>
             <span>快速操作</span>
           </template>
@@ -91,6 +75,23 @@
           </div>
         </el-card>
       </el-col>
+      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+        <el-card>
+          <template #header>
+            <span>材料类型分布</span>
+          </template>
+          <div class="type-stats">
+            <div v-for="(value, key) in filteredTypeStats" :key="key" class="type-item">
+              <span class="type-name">{{ getTypeName(key) }}</span>
+              <span class="type-value">{{ value }}</span>
+            </div>
+            <div v-if="Object.keys(filteredTypeStats).length === 0" class="empty-tip">
+              暂无数据
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      
     </el-row>
   </div>
 </template>
@@ -253,15 +254,56 @@ onMounted(async () => {
   padding: 20px;
 }
 
+.quick-actions-card :deep(.el-card__body) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
 .quick-actions {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* 确保按钮容器内的所有按钮都从同一位置开始 */
+.quick-actions > .action-btn {
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .action-btn {
-  flex: 1;
-  min-width: 120px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 !important;
+  padding: 12px 20px !important;
+  box-sizing: border-box;
+  text-align: left;
+  justify-content: flex-start;
+  border-width: 1px !important;
+  min-height: 40px;
+}
+
+/* 统一所有按钮的边框和盒模型 */
+.action-btn.el-button--primary,
+.action-btn:not(.el-button--primary) {
+  border-width: 1px !important;
+  box-sizing: border-box !important;
+}
+
+.action-btn :deep(.el-button__inner) {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 /* 移动端适配 */
@@ -281,11 +323,14 @@ onMounted(async () => {
   
   .action-btn {
     width: 100%;
-    margin-bottom: 8px;
+    max-width: 100%;
+    margin-bottom: 0;
   }
   
   .quick-actions {
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 }
 

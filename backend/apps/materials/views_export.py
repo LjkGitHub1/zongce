@@ -345,7 +345,7 @@ def download_all_by_class(request):
                     academic_data = []
                     # 定义字段顺序（按表单顺序，学号和姓名在前）
                     academic_field_orders = {
-                        'research_project': ['学号', '姓名', '项目名称', '项目级别', '立项时间', '结题时间', '项目经费（万元）', '项目编号', '主持人、参与人员及顺序', '备注'],
+                        'research_project': ['学号', '姓名', '项目名称', '项目级别', '立项时间', '结题时间', '项目经费（万元）', '项目编号', '主持人（姓名+学号）', '参与人（姓名+学号）', '指导教师', '负责人联系电话', '备注'],
                         'monograph': ['学号', '姓名', '专著名称', '出版社', '出版时间', '编号', '导师姓名', '撰写字数', '作者及顺序', '备注'],
                         'paper': ['学号', '姓名', '论文题目', '刊物名称', '类别', '刊号', '发表时间', '期刊收录情况', '中科院分区', '导师姓名', '是否第一单位', '导师是否通讯', '作者及排名', '备注'],
                         'other_academic': ['学号', '姓名', '成果内容', '备注'],
@@ -364,12 +364,15 @@ def download_all_by_class(request):
                                 # 添加特定字段（按表单顺序）
                                 if type_key == 'research_project':
                                     material_dict['项目名称'] = material.project_name or ''
-                                    material_dict['项目级别'] = material.level or ''
+                                    material_dict['项目级别'] = material.get_level_display() if material.level else (material.level or '')
                                     material_dict['立项时间'] = material.start_date.strftime('%Y-%m-%d') if material.start_date else ''
                                     material_dict['结题时间'] = material.end_date.strftime('%Y-%m-%d') if material.end_date else ''
                                     material_dict['项目经费（万元）'] = str(material.funds) if material.funds else ''
                                     material_dict['项目编号'] = material.number or ''
-                                    material_dict['主持人、参与人员及顺序'] = material.personnel or ''
+                                    material_dict['主持人（姓名+学号）'] = material.host or ''
+                                    material_dict['参与人（姓名+学号）'] = material.participants or ''
+                                    material_dict['指导教师'] = material.supervisor or ''
+                                    material_dict['负责人联系电话'] = material.contact_phone or ''
                                     material_dict['备注'] = material.remark or ''
                                 elif type_key == 'monograph':
                                     material_dict['专著名称'] = material.title or ''
@@ -447,10 +450,10 @@ def download_all_by_class(request):
                     practice_data = []
                     # 定义字段顺序（按表单顺序，学号和姓名在前）
                     practice_field_orders = {
-                        'technology_competition': ['学号', '姓名', '赛事名称', '是否为白名单赛事', '作品名称', '级别', '获奖时间', '获奖等级', '组织单位名称', '团体/个人', '负责人/参与者', '指导老师', '备注'],
-                        'social_practice': ['学号', '姓名', '名称', '级别', '时间', '主持人、参与者、顺序', '备注'],
-                        'social_service': ['学号', '姓名', '名称', '级别', '时间', '作者及顺序', '备注'],
-                        'other_practice': ['学号', '姓名', '名称', '级别', '时间', '提供证明单位', '参与人', '备注'],
+                        'technology_competition': ['学号', '姓名', '赛事名称', '是否为白名单赛事', '作品名称', '级别', '获奖时间', '获奖等级', '组织单位名称', '团体/个人', '负责人（姓名+学号）', '队员（姓名+学号）', '指导老师', '奖状编号', '负责人联系电话', '备注'],
+                        'social_practice': ['学号', '姓名', '名称', '级别', '时间', '主持人（姓名+学号）', '参与人（姓名+学号）', '具体内容', '负责人联系电话', '备注'],
+                        'social_service': ['学号', '姓名', '名称', '级别', '时间', '作者及顺序', '具体内容', '负责人联系电话', '备注'],
+                        'other_practice': ['学号', '姓名', '名称', '级别', '时间', '提供证明单位', '参与人', '具体内容', '负责人联系电话', '备注'],
                     }
                     
                     for type_key, (model, type_name) in practice_types.items():
@@ -473,27 +476,37 @@ def download_all_by_class(request):
                                     material_dict['获奖等级'] = material.grade or ''
                                     material_dict['组织单位名称'] = material.organization or ''
                                     material_dict['团体/个人'] = material.group or ''
-                                    material_dict['负责人/参与者'] = material.author or ''
+                                    material_dict['负责人（姓名+学号）'] = material.leader or ''
+                                    material_dict['队员（姓名+学号）'] = material.members or ''
                                     material_dict['指导老师'] = material.supervisor or ''
+                                    material_dict['奖状编号'] = material.certificate_number or ''
+                                    material_dict['负责人联系电话'] = material.contact_phone or ''
                                     material_dict['备注'] = material.remark or ''
                                 elif type_key == 'social_practice':
                                     material_dict['名称'] = material.title or ''
-                                    material_dict['级别'] = material.level or ''
+                                    material_dict['级别'] = material.get_level_display() if material.level else (material.level or '')
                                     material_dict['时间'] = material.date.strftime('%Y-%m-%d') if material.date else ''
-                                    material_dict['主持人、参与者、顺序'] = material.author or ''
+                                    material_dict['主持人（姓名+学号）'] = material.host or ''
+                                    material_dict['参与人（姓名+学号）'] = material.participants or ''
+                                    material_dict['具体内容'] = material.content or ''
+                                    material_dict['负责人联系电话'] = material.contact_phone or ''
                                     material_dict['备注'] = material.remark or ''
                                 elif type_key == 'social_service':
                                     material_dict['名称'] = material.title or ''
-                                    material_dict['级别'] = material.level or ''
+                                    material_dict['级别'] = material.get_level_display() if material.level else (material.level or '')
                                     material_dict['时间'] = material.date.strftime('%Y-%m-%d') if material.date else ''
                                     material_dict['作者及顺序'] = material.author or ''
+                                    material_dict['具体内容'] = material.content or ''
+                                    material_dict['负责人联系电话'] = material.contact_phone or ''
                                     material_dict['备注'] = material.remark or ''
                                 elif type_key == 'other_practice':
                                     material_dict['名称'] = material.title or ''
-                                    material_dict['级别'] = material.level or ''
+                                    material_dict['级别'] = material.get_level_display() if material.level else (material.level or '')
                                     material_dict['时间'] = material.date.strftime('%Y-%m-%d') if material.date else ''
                                     material_dict['提供证明单位'] = material.organization or ''
                                     material_dict['参与人'] = material.author or ''
+                                    material_dict['具体内容'] = material.content or ''
+                                    material_dict['负责人联系电话'] = material.contact_phone or ''
                                     material_dict['备注'] = material.remark or ''
                                 
                                 practice_data.append((material_dict, type_key))
@@ -650,8 +663,11 @@ def download_all_by_class(request):
                                         '获奖等级': material.grade or '',
                                         '组织单位名称': material.organization or '',
                                         '团体/个人': material.group or '',
-                                        '负责人/参与者': material.author or '',
+                                        '负责人（姓名+学号）': material.leader or '',
+                                        '队员（姓名+学号）': material.members or '',
                                         '指导老师': material.supervisor or '',
+                                        '奖状编号': material.certificate_number or '',
+                                        '负责人联系电话': material.contact_phone or '',
                                         '备注': material.remark or '',
                                     }
                                     tc_excel_data.append(material_dict)
@@ -661,7 +677,7 @@ def download_all_by_class(request):
                             
                             # 生成Excel文件
                             if tc_excel_data:
-                                field_order = ['学号', '姓名', '赛事名称', '是否为白名单赛事', '作品名称', '级别', '获奖时间', '获奖等级', '组织单位名称', '团体/个人', '负责人/参与者', '指导老师', '备注']
+                                field_order = ['学号', '姓名', '赛事名称', '是否为白名单赛事', '作品名称', '级别', '获奖时间', '获奖等级', '组织单位名称', '团体/个人', '负责人（姓名+学号）', '队员（姓名+学号）', '指导老师', '奖状编号', '负责人联系电话', '备注']
                                 wb = create_excel_file(tc_excel_data, field_order)
                                 excel_buffer = BytesIO()
                                 wb.save(excel_buffer)

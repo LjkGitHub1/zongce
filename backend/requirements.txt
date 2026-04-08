@@ -1,13 +1,24 @@
+# Django核心框架
 Django==5.0.0
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.3.0
+
+# 数据库相关
+# mysqlclient==2.2.0  # Windows上安装困难，使用PyMySQL替代
+PyMySQL==1.1.0
+
+# 过滤和跨域
 django-filter==23.3
+django-cors-headers==4.3.1
+
+# 异步任务队列
 celery==5.3.4
 redis==5.0.1
-# mysqlclient==2.2.0
-PyMySQL==1.1.0
+
+# 文件处理
 Pillow==10.2.0
-python-dotenv==1.0.0
-django-cors-headers==4.3.1
 openpyxl==3.1.2
+
+# 环境变量管理
+python-dotenv==1.0.0
 

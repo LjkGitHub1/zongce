@@ -657,7 +657,7 @@ watch(() => filters.class_name, (newVal) => {
 
 <style scoped>
 .audit-page {
-  padding: 20px;
+  padding: 0px;
 }
 
 .card-header {

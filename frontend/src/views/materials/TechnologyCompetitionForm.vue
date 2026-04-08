@@ -76,6 +76,10 @@
         </el-select>
       </el-form-item>
       
+      <el-form-item label="奖状编号">
+        <el-input v-model="form.certificate_number" placeholder="请输入奖状编号" />
+      </el-form-item>
+      
       <el-form-item label="组织单位名称">
         <el-input v-model="form.organization" placeholder="请输入组织单位名称" />
       </el-form-item>
@@ -87,18 +91,32 @@
         </el-select>
       </el-form-item>
       
-      <el-form-item label="负责人/参与者">
+      <el-form-item label="负责人（姓名+学号）">
         <el-input
-          v-model="form.author"
+          v-model="form.leader"
+          type="textarea"
+          :rows="2"
+          :disabled="form.group === '个人'"
+          :placeholder="form.group === '个人' ? '个人项目，自动填充为登录人' : '请输入负责人姓名和学号，格式：姓名-学号'"
+        />
+      </el-form-item>
+      
+      <el-form-item label="队员（姓名+学号）">
+        <el-input
+          v-model="form.members"
           type="textarea"
           :rows="3"
           :disabled="form.group === '个人'"
-          :placeholder="form.group === '个人' ? '个人项目，自动填充为登录人' : '请输入负责人/参与者及顺序'"
+          placeholder="请输入队员姓名和学号，格式：姓名-学号"
         />
       </el-form-item>
       
       <el-form-item label="指导老师">
         <el-input v-model="form.supervisor" placeholder="请输入指导老师" />
+      </el-form-item>
+      
+      <el-form-item label="负责人联系电话">
+        <el-input v-model="form.contact_phone" placeholder="请输入负责人联系电话" />
       </el-form-item>
       
       <el-form-item label="证明材料" prop="files">
@@ -173,21 +191,25 @@ const form = reactive({
   grade: '',
   organization: '',
   group: '团体', // 默认为团体
-  author: '',
+  leader: '',
+  members: '',
   supervisor: '',
+  certificate_number: '',
+  contact_phone: '',
   remark: ''
 })
 
 // 监听团体/个人选择变化
 watch(() => form.group, (newValue) => {
   if (newValue === '个人') {
-    // 选择个人时，自动填充登录人姓名
-    if (userStore.userInfo?.name) {
-      form.author = userStore.userInfo.name
+    // 选择个人时，自动填充登录人姓名和学号
+    if (userStore.userInfo?.name && userStore.userInfo?.student_id) {
+      form.leader = `${userStore.userInfo.name}-${userStore.userInfo.student_id}`
     }
   } else if (newValue === '团体') {
-    // 选择团体时，清空负责人/参与者字段，允许用户输入
-    form.author = ''
+    // 选择团体时，清空负责人/队员字段，允许用户输入
+    form.leader = ''
+    form.members = ''
   }
 })
 
@@ -312,14 +334,17 @@ const loadMaterial = async () => {
         grade: data.grade || '',
         organization: data.organization || '',
         group: data.group || '团体',
-        author: data.author || '',
+        leader: data.leader || '',
+        members: data.members || '',
         supervisor: data.supervisor || '',
+        certificate_number: data.certificate_number || '',
+        contact_phone: data.contact_phone || '',
         remark: data.remark || ''
       })
       
-      // 如果当前是个人项目，自动填充登录人姓名
-      if (form.group === '个人' && userStore.userInfo?.name) {
-        form.author = userStore.userInfo.name
+      // 如果当前是个人项目，自动填充登录人姓名和学号
+      if (form.group === '个人' && userStore.userInfo?.name && userStore.userInfo?.student_id) {
+        form.leader = `${userStore.userInfo.name}-${userStore.userInfo.student_id}`
       }
       
       // 加载已有文件列表
@@ -364,9 +389,9 @@ onMounted(async () => {
     await userStore.fetchUserInfo()
   }
   
-  // 如果当前是个人项目，自动填充登录人姓名
-  if (form.group === '个人' && userStore.userInfo?.name) {
-    form.author = userStore.userInfo.name
+  // 如果当前是个人项目，自动填充登录人姓名和学号
+  if (form.group === '个人' && userStore.userInfo?.name && userStore.userInfo?.student_id) {
+    form.leader = `${userStore.userInfo.name}-${userStore.userInfo.student_id}`
   }
   
   // 如果是编辑模式，加载材料数据

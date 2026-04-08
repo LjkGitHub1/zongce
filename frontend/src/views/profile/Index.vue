@@ -235,7 +235,7 @@ onMounted(() => {
 
 <style scoped>
 .profile-page {
-  padding: 20px;
+  padding: 0px;
 }
 </style>
 
